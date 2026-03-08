@@ -2,9 +2,9 @@
  
 ## Fra2mo Simulation Project
 
-This repository provides everything needed to simulate Fra2mo:
-**docker_scripts/**: scripts to start and install libraries via Docker
-**src/**: contains submodules as:
+This repository provides everything needed to simulate Fra2mo: \\
+**docker_scripts/**: scripts to start and install libraries via Docker\\
+**src/**: contains submodules as:\\
     - `fra2mo_description` package for visualization in Gazebo and Rviz
 
 #### Docker setup
