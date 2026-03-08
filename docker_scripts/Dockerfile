@@ -46,6 +46,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	ros-humble-ros-gz-sim \
 	ros-humble-ros-gz-bridge \
 	ros-humble-rqt-tf-tree \
+	ros-humble-joy \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Build the ROS2 workspace
