@@ -6,4 +6,5 @@
 	url = https://github.com/norlab-ulaval/teleop_twist_joy_ros2.git
 [submodule "src/teleop_twist_joy_ros2"]
 	path = src/teleop_twist_joy_ros2
-	url = https://github.com/norlab-ulaval/teleop_twist_joy_ros2
+	url = https://github.com/ros2/teleop_twist_joy.git
+	branch = humble
