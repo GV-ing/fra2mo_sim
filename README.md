@@ -42,4 +42,5 @@ Start the teleoperation node after the joy node:
    ros2 run joy joy_node
    ```
    ```bash
-	ros2 launch teleop_twist_joy teleop-launch.py joy_config:='xbox'
+	ros2 launch teleop_twist_joy teleop-launch.py
+
