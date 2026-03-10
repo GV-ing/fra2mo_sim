@@ -42,6 +42,5 @@ Start the teleoperation node after the joy node:
    ros2 run joy joy_node
    ```
    ```bash
-   ros2 launch teleop_twist_joy_ros2 teleop-launch.py joy_config:='<controller>'
-   ```
-   Replace `<controller>` with the desired configuration (e.g., `ps3`, `xbox`).
+	ros2 launch teleop_twist_joy teleop-launch.py joy_config:='xbox'
+	 ```
