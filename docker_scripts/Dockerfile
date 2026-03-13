@@ -28,6 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Create ROS2 workspace structure
 RUN mkdir -p /root/ros2_ws/src
 COPY tmp_sources/ /root/ros2_ws/src/
+RUN find /root/ros2_ws/src -name joy_to_cmdvel.py -exec chmod +x {} \;
 WORKDIR /root/ros2_ws
 
 # Install ROS2 dependencies
