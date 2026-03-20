@@ -33,6 +33,7 @@ WORKDIR /root/ros2_ws
 
 # Install ROS2 dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
+	ros-humble-gazebo-ros-pkgs \
 	ros-humble-geometry-msgs \
 	ros-humble-std-msgs \
 	ros-humble-tf2 \
@@ -48,6 +49,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	ros-humble-ros-gz-bridge \
 	ros-humble-rqt-tf-tree \
 	ros-humble-joy \
+	ros-humble-slam-toolbox \
+	ros-humble-nav2-bringup \
+	ros-humble-nav2-amcl \
+	ros-humble-nav2-map-server \
+	ros-humble-nav2-lifecycle-manager \
+	ros-humble-nav2-msgs \
+	ros-humble-nav2-common \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Build the ROS2 workspace
