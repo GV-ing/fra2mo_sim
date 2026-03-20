@@ -1,3 +1,9 @@
 [submodule "/home/pcgiulio/Desktop/fra2mo_sim/src/teleop_twist_joy_ros2"]
 	path = /home/pcgiulio/Desktop/fra2mo_sim/src/teleop_twist_joy_ros2
 	url = https://github.com/norlab-ulaval/teleop_twist_joy_ros2.git
+[submodule "src/fra2mo_description"]
+	path = src/fra2mo_description
+	url = https://github.com/GV-ing/fra2mo_description
+[submodule "src/fra2mo_navigation"]
+	path = src/fra2mo_navigation
+	url = https://github.com/GV-ing/fra2mo_navigation
