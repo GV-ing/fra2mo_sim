@@ -12,7 +12,7 @@ else
   echo "Error: Source directory ../src does not exist. Exiting."
   exit 1
 fi
-s
+
 if docker build -t robot_description -f ./Dockerfile .; then
   rm -rf ./tmp_sources
   echo "Build completed. Start the container with: ./docker_run_container.sh"
