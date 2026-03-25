@@ -59,6 +59,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-nav2-lifecycle-manager \
     ros-humble-nav2-msgs \
     ros-humble-nav2-common \
+    ros-humble-rmw-cyclonedds-cpp \
     && rm -rf /var/lib/apt/lists/*
 
 # Build the ROS2 workspace
@@ -71,6 +72,7 @@ RUN echo '#!/bin/bash' > /entrypoint.sh && \
     echo 'export GZ_VERSION=harmonic' >> /entrypoint.sh && \
     echo 'export GZ_SIM_RESOURCE_PATH=/root/ros2_ws/install/fra2mo_description/share:$GZ_SIM_RESOURCE_PATH' >> /entrypoint.sh && \
     echo 'export ROS_DOMAIN_ID=97' >> /entrypoint.sh && \
+    echo 'export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp' >> /entrypoint.sh && \
     echo 'exec "$@"' >> /entrypoint.sh && \
     chmod +x /entrypoint.sh
 
@@ -79,7 +81,8 @@ RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc \
     && echo "source /root/ros2_ws/install/local_setup.bash" >> /root/.bashrc \
     && echo "export GZ_VERSION=harmonic" >> /root/.bashrc \
     && echo "export GZ_SIM_RESOURCE_PATH=/root/ros2_ws/install/fra2mo_description/share:\$GZ_SIM_RESOURCE_PATH" >> /root/.bashrc \
-    && echo "export ROS_DOMAIN_ID=97" >> /root/.bashrc
+    && echo "export ROS_DOMAIN_ID=97" >> /root/.bashrc \
+    && echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> /root/.bashrc
 
 ENTRYPOINT ["/entrypoint.sh"]
 WORKDIR /root/ros2_ws
