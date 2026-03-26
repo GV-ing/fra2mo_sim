@@ -1,9 +1,9 @@
 #!/bin/bash
 THISDIR=$(dirname "$(realpath "$0")")
 
-IMAGE_NAME="robot_description"
+IMAGE_NAME="fra2mo_simulation_image"
 IMAGE_ID=$(docker images -q "$IMAGE_NAME")
-CNT_NAME="robot_description_cnt"
+CNT_NAME="fra2mo_simulation_cnt"
 
 # Start the container with options required to run ROS2 and Gazebo with GUI
 xhost +local:root

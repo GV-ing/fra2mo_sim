@@ -13,7 +13,7 @@ else
   exit 1
 fi
 
-if docker build -t robot_description -f ./Dockerfile .; then
+if docker build -t fra2mo_simulation_image -f ./Dockerfile .; then
   rm -rf ./tmp_sources
   echo "Build completed. Start the container with: ./docker_run_container.sh"
 else
