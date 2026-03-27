@@ -71,6 +71,7 @@ RUN echo '#!/bin/bash' > /entrypoint.sh && \
     echo 'source /root/ros2_ws/install/local_setup.bash' >> /entrypoint.sh && \
     echo 'export GZ_VERSION=harmonic' >> /entrypoint.sh && \
     echo 'export GZ_SIM_RESOURCE_PATH=/root/ros2_ws/install/fra2mo_description/share:$GZ_SIM_RESOURCE_PATH' >> /entrypoint.sh && \
+    #domain ID 97
     echo 'export ROS_DOMAIN_ID=97' >> /entrypoint.sh && \
     echo 'export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp' >> /entrypoint.sh && \
     echo 'exec "$@"' >> /entrypoint.sh && \
@@ -81,6 +82,7 @@ RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc \
     && echo "source /root/ros2_ws/install/local_setup.bash" >> /root/.bashrc \
     && echo "export GZ_VERSION=harmonic" >> /root/.bashrc \
     && echo "export GZ_SIM_RESOURCE_PATH=/root/ros2_ws/install/fra2mo_description/share:\$GZ_SIM_RESOURCE_PATH" >> /root/.bashrc \
+    #ID DOMAIN 97
     && echo "export ROS_DOMAIN_ID=97" >> /root/.bashrc \
     && echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> /root/.bashrc
 
