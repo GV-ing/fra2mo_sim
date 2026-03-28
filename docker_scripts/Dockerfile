@@ -9,11 +9,13 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 WORKDIR /root
 
+RUN apt-get update || true && apt-get install -y curl \
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    
 # Install essential build tools, Gazebo Harmonic repo, and ROS utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
     lsb-release \
     gnupg \
-    curl \
     wget \
     build-essential \
     python3-pip \
