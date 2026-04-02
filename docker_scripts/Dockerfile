@@ -39,6 +39,7 @@ WORKDIR /root/ros2_ws
 
 # Install ROS2 dependencies for Harmonic
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-humble-plotjuggler-ros \
     ros-humble-geometry-msgs \
     ros-humble-std-msgs \
     ros-humble-tf2 \
