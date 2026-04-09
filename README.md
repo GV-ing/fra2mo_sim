@@ -44,7 +44,7 @@ chmod +x docker_scripts/*.sh
 
 # Avvia il container
 ./docker_scripts/docker_run_container.sh
-
+```
 
 # 2. Il Sorgente: La Cartella `src`
 
