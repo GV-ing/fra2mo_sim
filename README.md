@@ -63,8 +63,14 @@ Questo pacchetto definisce l'identità fisica e visiva del robot. È il componen
 * **`CMakeLists.txt` & `package.xml`**: File di build e metadati essenziali per la compilazione tramite `colcon` e la gestione delle dipendenze ROS2.
 
 ## 2.2 fra2mo_navigation
-Questo pacchetto rappresenta lo strato "intelligente" del robot. Implementa lo stack di navigazione e gli algoritmi di percezione spaziale.
+Questo pacchetto implementa lo stack di navigazione e gli algoritmi di percezione spaziale.
 
+
+### Struttura del Pacchetto:
+* **`maps/`**: Contiene i file delle mappe generate tramite SLAM.
+* **`launch/`**: Script Python per l'avvio coordinato dei nodi. Contiene i file di lancio per le funzionalità SLAM e AMCL.
+* **`conf/`**: Ospita il file di configurazione per Nav2, permette di definire tutti i parametri necessari per la navigazione autonoma e le funzionalità SLAM e AMCL.
+* **`CMakeLists.txt` & `package.xml`**: File di build e metadati essenziali per la compilazione tramite `colcon` e la gestione delle dipendenze ROS2.
 ### Funzionalità Principali:
 * **SLAM (Simultaneous Localization and Mapping)**: Permette al robot di mappare un ambiente ignoto utilizzando i dati del Lidar e dell'odometria.
 * **AMCL (Adaptive Monte Carlo Localization)**: Gestisce la localizzazione probabilistica del robot all'interno di una mappa precedentemente acquisita.
