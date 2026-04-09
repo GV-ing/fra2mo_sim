@@ -5,7 +5,10 @@ IMAGE_NAME="fra2mo_simulation_image"
 IMAGE_ID=$(docker images -q "$IMAGE_NAME")
 CNT_NAME="fra2mo_simulation_cnt"
 
-# Start the container with options required to run ROS2 and Gazebo with GUI
+CONTAINER_CMD=(bash)
+if [[ "$1" == "--build" ]]; then
+	CONTAINER_CMD=(bash -lc "source /opt/ros/humble/setup.bash && colcon build --symlink-install && source /root/ros2_ws/install/setup.bash && exec bash -i")
+fi
 xhost +local:root
 docker run --rm -it --net=host \
 	--env="DISPLAY=$DISPLAY" \
@@ -19,6 +22,6 @@ docker run --rm -it --net=host \
 	--name="$CNT_NAME" \
 	--workdir "/root/ros2_ws" \
 	"$IMAGE_NAME" \
-	bash
+	"${CONTAINER_CMD[@]}"
 
 xhost -local:root
