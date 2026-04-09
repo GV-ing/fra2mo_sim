@@ -1,83 +1,126 @@
-# Fra2mo_sim
-## Struttura della Repository e Virtualizzazione (Docker)
+# fra2mo_sim
 
-La repository `fra2mo_sim` è progettata per offrire un ambiente di sviluppo isolato e riproducibile. L'obiettivo è garantire la piena portabilità della simulazione su qualsiasi sistema compatibile con Docker, eliminando i conflitti di dipendenze locali e facilitando il deploy finale sull'hardware reale.
+## Overview
 
-### Architettura del Workspace
+This repository contains the core packages used to simulate **fra2mo**, a differential-drive mobile robot developed for educational and research purposes.
 
-Il progetto segue una struttura modulare standard per la robotica moderna, divisa in due direttori principali:
+The project has two main goals:
 
-* **`docker_scripts/`**: Contiene gli strumenti di automazione per la creazione e la gestione del sistema virtuale.
-* **`src/`**: Il cuore del progetto, contenente il codice sorgente dei pacchetti ROS2 (URDF, algoritmi di navigazione, configurazioni dei sensori).
+1. **Technical reference**: document the software architecture and runtime logic of the robot in a ROS 2 Humble environment.
+2. **Operational guide**: provide a practical workflow for developing, extending, and testing a generic differential-drive robot in simulation before deploying software to real hardware.
 
-Questo approccio permette di mantenere il sistema operativo host pulito e di distribuire un "template" operativo identico per ogni sviluppatore del team.
+The repository is designed to provide a reproducible development environment based on Docker, reducing host-side dependency conflicts and making the simulation stack easier to share across different machines.
 
-### Funzionalità dei Docker Scripts
+## Repository Structure
 
-La cartella `docker_scripts` include una suite di script Bash che automatizzano l'intero ciclo di vita del container:
+The workspace is organized around two main directories:
 
-| File | Funzione |
+- **`docker_scripts/`**: scripts and configuration used to build, run, and access the Docker-based development environment.
+- **`src/`**: ROS 2 packages and simulation assets, including robot description, navigation configuration, sensors, maps, and launch files.
+
+This setup keeps the host system clean while giving every developer the same execution environment.
+
+## Docker Environment
+
+The `docker_scripts/` directory contains the automation needed to manage the container lifecycle.
+
+| File | Purpose |
 | :--- | :--- |
-| **`Dockerfile`** | Definisce l'immagine di base (Ubuntu 22.04 + ROS2 Humble), installa i driver per Gazebo Harmonic e mappa i pacchetti della cartella `src` nel workspace virtuale. |
-| **`docker_build_image.sh`** | Esegue la costruzione dell'immagine Docker. Deve essere lanciato la prima volta o dopo ogni modifica al Dockerfile. |
-| **`docker_run_container.sh`** | Istanzia il container. Configura l'inoltro dei segnali video (X11) per permettere l'apertura di GUI come Gazebo e RViz dall'interno del container. |
-| **`docker_connect.sh`** | Permette di aprire sessioni terminali aggiuntive in un container già attivo. Indispensabile per il monitoraggio dei topic e l'esecuzione di comandi paralleli. |
+| **`Dockerfile`** | Defines the base image built around Ubuntu 22.04 and ROS 2 Humble, installs Gazebo Harmonic support, and prepares the workspace used inside the container. |
+| **`docker_build_image.sh`** | Builds the Docker image. Run it the first time and whenever the Dockerfile changes. |
+| **`docker_run_container.sh`** | Starts the container and configures X11 forwarding so GUI applications such as Gazebo and RViz can run from inside the container. |
+| **`docker_connect.sh`** | Opens an additional shell inside a running container, which is useful for monitoring topics or running commands in parallel. |
 
-### Standard Operativo e Vantaggi
+### Why Docker Is Used
 
-L'uso dei container per il robot **fra2mo** non è solo una scelta di comodità, ma uno standard tecnico che offre:
+Containerization is a technical choice, not just a convenience feature. It provides:
 
-1.  **Isolamento:** Ogni utente lavora con le stesse versioni di librerie (es. Nav2, Gazebo Harmonic), evitando il "funziona solo sul mio PC".
-2.  **Facilità di Installazione:** La configurazione dell'ambiente richiede solo pochi comandi, riducendo i tempi di setup da ore a minuti.
-3.  **Portabilità Hardware:** Permette un passaggio fluido dei pacchetti di controllo tra la workstation di simulazione e il **LattePanda** a bordo del robot reale.
+1. **Isolation**: every developer uses the same versions of ROS 2, Nav2, Gazebo, and related dependencies.
+2. **Faster setup**: environment provisioning takes minutes instead of manually reproducing a full robotics stack.
+3. **Portability**: software developed in simulation can be transferred more reliably to the onboard computer used on the real robot.
 
----
+## Quick Start
 
-#### Istruzioni Rapide
-Per avviare l'ambiente per la prima volta:
+To prepare and launch the environment for the first time:
 
 ```bash
-# Rendi eseguibili gli script
 chmod +x docker_scripts/*.sh
-
-# Costruisci l'immagine
 ./docker_scripts/docker_build_image.sh
-
-# Avvia il container
 ./docker_scripts/docker_run_container.sh
 ```
 
-## La Cartella `src`
+Once the container is running, you can attach additional shells with:
 
-La cartella `src` ospita i pacchetti ROS2 fondamentali per l'ecosistema **fra2mo**. L'architettura è divisa in due moduli principali che separano la modellizzazione fisica del robot dalle sue capacità algoritmiche.
+```bash
+./docker_scripts/docker_connect.sh
+```
+
+## ROS 2 Packages in `src`
+
+The `src/` directory contains the main ROS 2 packages that define the **fra2mo** simulation stack. The workspace is split into two complementary modules: one focused on robot modeling and simulation assets, and one focused on navigation.
 
 ### fra2mo_description
-Questo pacchetto definisce l'identità fisica e visiva del robot. È il componente responsabile della generazione del modello URDF/Xacro, dell'integrazione dei sensori e della configurazione degli ambienti di simulazione in **Gazebo Harmonic**.
 
-#### Struttura del Pacchetto:
-* **`urdf/`**: Contiene i file Xacro che descrivono la cinematica differenziale, i link e i giunti (joints) del robot. Il file principale richiama macro specifiche per motori e sensori.
-* **`meshes/`** & **`models/`**: Includono i file geometrici (STL/DAE) del corpo del robot, dei sensori (Lidar, D435) e degli asset statici dell'ambiente di simulazione.
-* **`worlds/`**: Contiene i file `.sdf` che definiscono il mondo virtuale (es. `leonardo_race_field.sdf`), includendo parametri fisici come gravità e illuminazione.
-* **`launch/`**: Script Python per l'avvio coordinato dei nodi. Gestiscono l'esecuzione di `robot_state_publisher`, il caricamento del mondo in Gazebo e l'apertura di RViz.
-* **`conf/`**: Ospita i file `.rviz`, che memorizzano i settaggi della GUI (visualizzazione trasformate TF, PointCloud, LaserScan) per un avvio immediato.
-* **`src/`**: Destinata ai nodi custom (Python/C++). Un esempio è il nodo per la conversione dei comandi Joypad in messaggi `cmd_vel`.
-* **`CMakeLists.txt` & `package.xml`**: File di build e metadati essenziali per la compilazione tramite `colcon` e la gestione delle dipendenze ROS2.
+This package defines the physical and visual representation of the robot. It includes the URDF/Xacro description, simulated sensors, Gazebo worlds, RViz configuration, and custom support nodes.
+
+#### Main contents
+
+- **`urdf/`**: Xacro files describing the differential-drive robot, including links, joints, and reusable sensor macros.
+- **`meshes/`** and **`models/`**: 3D geometry and simulation assets for the robot and the environment.
+- **`worlds/`**: SDF worlds used in simulation, including the race field environment.
+- **`launch/`**: launch files used to start the robot description stack, Gazebo, and RViz.
+- **`conf/`**: RViz configuration files for a ready-to-use visualization setup.
+- **`src/`**: custom nodes, such as the joystick-to-`cmd_vel` interface.
+- **`CMakeLists.txt`** and **`package.xml`**: build configuration and package metadata.
 
 ### fra2mo_navigation
-Questo pacchetto implementa lo stack di navigazione e gli algoritmi di percezione spaziale.
 
+This package contains the navigation stack configuration and spatial perception tools used by the robot.
 
-#### Struttura del Pacchetto:
-* **`maps/`**: Contiene i file delle mappe generate tramite SLAM.
-* **`launch/`**: Script Python per l'avvio coordinato dei nodi. Contiene i file di lancio per le funzionalità SLAM e AMCL.
-* **`conf/`**: Ospita il file di configurazione per Nav2, permette di definire tutti i parametri necessari per la navigazione autonoma e le funzionalità SLAM e AMCL.
-* **`CMakeLists.txt` & `package.xml`**: File di build e metadati essenziali per la compilazione tramite `colcon` e la gestione delle dipendenze ROS2.
-#### Funzionalità Principali:
-* **SLAM (Simultaneous Localization and Mapping)**: Permette al robot di mappare un ambiente ignoto utilizzando i dati del Lidar e dell'odometria.
-* **AMCL (Adaptive Monte Carlo Localization)**: Gestisce la localizzazione probabilistica del robot all'interno di una mappa precedentemente acquisita.
-* **Nav2 Integration**: Configura i controller e i planner per la navigazione autonoma, permettendo al robot di calcolare percorsi ottimi ed evitare ostacoli dinamici.
+#### Main contents
 
----
+- **`maps/`**: maps generated or used by localization and navigation workflows.
+- **`launch/`**: launch files for SLAM and AMCL workflows.
+- **`config/`**: Nav2 parameter files used to configure autonomous navigation behavior.
+- **`CMakeLists.txt`** and **`package.xml`**: build configuration and package metadata.
 
-### Nota Tecnica: Standard ROS2
-Entrambi i pacchetti seguono lo standard di build `ament_cmake` o `ament_python`, garantendo che, dopo l'esecuzione del comando `colcon build`, tutti gli asset (mesh, launch files, urdf) siano correttamente installati nel `vostro_workspace/install/` e pronti per essere eseguiti.
+#### Main capabilities
+
+- **SLAM (Simultaneous Localization and Mapping)**: allows the robot to map an unknown environment using lidar and odometry data.
+- **AMCL (Adaptive Monte Carlo Localization)**: localizes the robot inside a previously generated map.
+- **Nav2 integration**: provides planners, controllers, and recovery behaviors for autonomous navigation and obstacle avoidance.
+
+## Submodules
+
+The packages inside `src/` are managed as Git submodules:
+
+- `src/fra2mo_description`
+- `src/fra2mo_navigation`
+
+If you clone the repository from scratch, initialize them with:
+
+```bash
+git submodule update --init --recursive
+```
+
+If the submodule pointers are updated in this repository, make sure to pull the latest changes and refresh them locally.
+
+## Build Notes
+
+Both packages follow the standard ROS 2 packaging workflow and are intended to be built with `colcon`. After building the workspace, assets such as meshes, launch files, maps, and URDF resources are installed into the workspace `install/` directory and become available to ROS 2 launch tooling.
+
+Typical build command inside the container:
+
+```bash
+colcon build
+source install/setup.bash
+```
+
+## Purpose of This Repository
+
+`fra2mo_sim` is intended to be both a simulation workspace and a reference template for differential-drive robotics projects. It can be used to:
+
+- study the structure of a ROS 2 robot simulation project,
+- prototype robot behavior before testing on hardware,
+- extend sensors, worlds, and navigation features,
+- maintain a reproducible robotics environment for a team.
