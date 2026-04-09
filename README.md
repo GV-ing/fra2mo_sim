@@ -102,8 +102,15 @@ This package contains the navigation stack configuration and spatial perception 
 #### Main capabilities
 
 - **SLAM (Simultaneous Localization and Mapping)**: allows the robot to map an unknown environment using lidar and odometry data.
+```bash
+ros2 launch fra2mo_navigation slam.launch.py
+```
 - **AMCL (Adaptive Monte Carlo Localization)**: localizes the robot inside a previously generated map.
-- **Nav2 integration**: provides planners, controllers, and recovery behaviors for autonomous navigation and obstacle avoidance.
+```bash
+ros2 launch fra2mo_navigation amcl.launch.py
+```
+- **Nav2 integration**: provides planners, controllers, and recovery behaviors for autonomous navigation and obstacle avoidance. It is launched automatically for both files.
+
 
 ## Submodules
 
@@ -112,6 +119,7 @@ The packages inside `src/` are managed as Git submodules:
 - `src/fra2mo_description`
 - `src/fra2mo_navigation`
 
+This design choice is practical, as it allows us to modify individual packages more easily and recall them for other projects if necessary.
 If you clone the repository from scratch, initialize them with:
 
 ```bash
@@ -122,20 +130,11 @@ If the submodule pointers are updated in this repository, make sure to pull the 
 
 ## Build Notes
 
-Both packages follow the standard ROS 2 packaging workflow and are intended to be built with `colcon`. After building the workspace, assets such as meshes, launch files, maps, and URDF resources are installed into the workspace `install/` directory and become available to ROS 2 launch tooling.
+Whenever changes are made to packages, you need to run,inside the container, the following commands:
 
-Typical build command inside the container:
 
 ```bash
 colcon build
 source install/setup.bash
 ```
 
-## Purpose of This Repository
-
-`fra2mo_sim` is intended to be both a simulation workspace and a reference template for differential-drive robotics projects. It can be used to:
-
-- study the structure of a ROS 2 robot simulation project,
-- prototype robot behavior before testing on hardware,
-- extend sensors, worlds, and navigation features,
-- maintain a reproducible robotics environment for a team.
