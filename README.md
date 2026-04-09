@@ -44,3 +44,33 @@ chmod +x docker_scripts/*.sh
 
 # Avvia il container
 ./docker_scripts/docker_run_container.sh
+
+
+# 2. Il Sorgente: La Cartella `src`
+
+La cartella `src` ospita i pacchetti ROS2 fondamentali per l'ecosistema **fra2mo**. L'architettura è divisa in due moduli principali che separano la modellizzazione fisica del robot dalle sue capacità algoritmiche.
+
+## 2.1 fra2mo_description
+Questo pacchetto definisce l'identità fisica e visiva del robot. È il componente responsabile della generazione del modello URDF/Xacro, dell'integrazione dei sensori e della configurazione degli ambienti di simulazione in **Gazebo Harmonic**.
+
+### Struttura del Pacchetto:
+* **`urdf/`**: Contiene i file Xacro che descrivono la cinematica differenziale, i link e i giunti (joints) del robot. Il file principale richiama macro specifiche per motori e sensori.
+* **`meshes/` & **`models/`**: Includono i file geometrici (STL/DAE) del corpo del robot, dei sensori (Lidar, D435) e degli asset statici dell'ambiente di simulazione.
+* **`worlds/`**: Contiene i file `.sdf` che definiscono il mondo virtuale (es. `leonardo_race_field.sdf`), includendo parametri fisici come gravità e illuminazione.
+* **`launch/`**: Script Python per l'avvio coordinato dei nodi. Gestiscono l'esecuzione di `robot_state_publisher`, il caricamento del mondo in Gazebo e l'apertura di RViz.
+* **`conf/`**: Ospita i file `.rviz`, che memorizzano i settaggi della GUI (visualizzazione trasformate TF, PointCloud, LaserScan) per un avvio immediato.
+* **`src/`**: Destinata ai nodi custom (Python/C++). Un esempio è il nodo per la conversione dei comandi Joypad in messaggi `cmd_vel`.
+* **`CMakeLists.txt` & `package.xml`**: File di build e metadati essenziali per la compilazione tramite `colcon` e la gestione delle dipendenze ROS2.
+
+## 2.2 fra2mo_navigation
+Questo pacchetto rappresenta lo strato "intelligente" del robot. Implementa lo stack di navigazione e gli algoritmi di percezione spaziale.
+
+### Funzionalità Principali:
+* **SLAM (Simultaneous Localization and Mapping)**: Permette al robot di mappare un ambiente ignoto utilizzando i dati del Lidar e dell'odometria.
+* **AMCL (Adaptive Monte Carlo Localization)**: Gestisce la localizzazione probabilistica del robot all'interno di una mappa precedentemente acquisita.
+* **Nav2 Integration**: Configura i controller e i planner per la navigazione autonoma, permettendo al robot di calcolare percorsi ottimi ed evitare ostacoli dinamici.
+
+---
+
+### Nota Tecnica: Standard ROS2
+Entrambi i pacchetti seguono lo standard di build `ament_cmake` o `ament_python`, garantendo che, dopo l'esecuzione del comando `colcon build`, tutti gli asset (mesh, launch files, urdf) siano correttamente installati nel `vostro_workspace/install/` e pronti per essere eseguiti.
