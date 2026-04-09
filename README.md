@@ -55,7 +55,7 @@ Questo pacchetto definisce l'identità fisica e visiva del robot. È il componen
 
 ### Struttura del Pacchetto:
 * **`urdf/`**: Contiene i file Xacro che descrivono la cinematica differenziale, i link e i giunti (joints) del robot. Il file principale richiama macro specifiche per motori e sensori.
-* **`meshes/` & **`models/`**: Includono i file geometrici (STL/DAE) del corpo del robot, dei sensori (Lidar, D435) e degli asset statici dell'ambiente di simulazione.
+* **`meshes/`** & **`models/`**: Includono i file geometrici (STL/DAE) del corpo del robot, dei sensori (Lidar, D435) e degli asset statici dell'ambiente di simulazione.
 * **`worlds/`**: Contiene i file `.sdf` che definiscono il mondo virtuale (es. `leonardo_race_field.sdf`), includendo parametri fisici come gravità e illuminazione.
 * **`launch/`**: Script Python per l'avvio coordinato dei nodi. Gestiscono l'esecuzione di `robot_state_publisher`, il caricamento del mondo in Gazebo e l'apertura di RViz.
 * **`conf/`**: Ospita i file `.rviz`, che memorizzano i settaggi della GUI (visualizzazione trasformate TF, PointCloud, LaserScan) per un avvio immediato.
