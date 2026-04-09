@@ -73,6 +73,21 @@ This package defines the physical and visual representation of the robot. It inc
 - **`src/`**: custom nodes, such as the joystick-to-`cmd_vel` interface.
 - **`CMakeLists.txt`** and **`package.xml`**: build configuration and package metadata.
 
+#### Launch files
+The `fra2mo_description` package includes two main launch files that coordinate the startup of the software environment. Although they are commonly used together, they serve different purposes:
+
+* **`fra2mo_gazebo.launch.py`**: Manages the physical simulation environment in **Gazebo Harmonic**. It computes the robot dynamics, simulates sensors, and loads the virtual world (`.sdf`). It is the simulation engine that generates the runtime data.
+```bash
+ros2 launch fra2mo_description fra2mo_gazebo.launch.py
+```
+* **`fra2mo_rviz.launch.py`**: Starts the monitoring and visualization interface in **RViz2**. It does not simulate physics; instead, it subscribes to runtime topics such as lidar point clouds, TF transforms, and camera data, and renders them in a 3D view for the operator.
+```bash
+ros2 launch fra2mo_description fra2mo_rviz.launch.py
+```
+
+
+
+
 ### fra2mo_navigation
 
 This package contains the navigation stack configuration and spatial perception tools used by the robot.
